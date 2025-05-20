@@ -8,11 +8,7 @@
 #ifndef __TMXPROFILEHANDLE__
 #define __TMXPROFILEHANDLE__
 
-#if defined(__has_feature) && __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
 
 #define TMX_NAME_PASTE2( a, b) a##b
 #define TMX_NAME_PASTE( a, b) TMX_NAME_PASTE2( a, b)

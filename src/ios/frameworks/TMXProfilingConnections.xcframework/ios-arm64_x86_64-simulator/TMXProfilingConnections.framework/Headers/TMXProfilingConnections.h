@@ -9,15 +9,10 @@
 #ifndef __TMXPROFILINGCONNECTIONS__
 #define __TMXPROFILINGCONNECTIONS__
 
-#if defined(__has_feature) && __has_feature(modules)
-@import Foundation;
-@import CoreData;
-#else
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#endif
 
-#import "TMXProfilingConnectionsProtocol.h"
+#import <TMXProfilingConnections/TMXProfilingConnectionsProtocol.h>
 
 #ifdef __cplusplus
 #define EXTERN        extern "C" __attribute__((visibility ("default")))

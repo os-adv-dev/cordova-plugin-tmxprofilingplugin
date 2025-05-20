@@ -4,66 +4,77 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Headers/TMXHybridAppSupport.h</key>
+		<data>
+		O5Nsb+1KvMANnnAWJtuRXbxD4hw=
+		</data>
 		<key>Headers/TMXProfileHandle.h</key>
 		<data>
-		k2GIziv+Tejbz7cfhIvlFsV1o64=
+		IXHzYel450Wr+BkusXneTYDS5/8=
 		</data>
 		<key>Headers/TMXProfiling.h</key>
 		<data>
-		ROojRaNgZovq0Trzr6LYoGT7llQ=
+		A4CImsAdCx6fso3aoptiMVt7oIo=
 		</data>
 		<key>Headers/TMXStatusCode.h</key>
 		<data>
-		yTgf4BVY0tKzaDPAa2554IPUb90=
+		JdZkk5mI1J7IuVUw4MitDwJIW5U=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Ie++F7mG3QYmxlHLzwq9RFkHrPY=
+		AzMBnAX+J65AypJx9KRih5QoECA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		fN0eYTQNz0DDJtFwBEtWK1rVLZU=
+		976r/FaAGtDrR0szSdySixKbD3A=
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
-		FA9IMK7e3oHIFxJLoZnCmYquEgY=
+		LLlOaLnmKzHD0/DfOh2XZCVjN94=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Headers/TMXHybridAppSupport.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			UDh0u+YU/vxypamfNQOdq64A+HNt/KkKz2Q0KDalGDg=
+			</data>
+		</dict>
 		<key>Headers/TMXProfileHandle.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AUJfLgWUVW63bftGGBb6L8UwB2fMbdiRsnyEE0w9VCE=
+			/VwUrRxz87tl1Xe1tnULzQXI3tw+VSE1ogFpSoc4IXI=
 			</data>
 		</dict>
 		<key>Headers/TMXProfiling.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QyDCCQ2kJQvEOSci+k2DXsYohVketYK81D6I4WlsWJs=
+			cGYsF/CFCuG7PCNnb5QDe/9TnnBz9JZBjhAuOfe0E+M=
 			</data>
 		</dict>
 		<key>Headers/TMXStatusCode.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Z4W/usqCycVcja+UdEiBbH1VF2+qjWqJUjFMo+LZG38=
+			Cs4TcWI9QggQGjbN4umyBN+6yunpPlUQswnwbUuBNxs=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TFm8kgk8CrexInzLNwWOeiY5Ayvk9fqv60dfP3lIK4Q=
+			+CBYh+DQ2oHSBb0GgF72fJqrjd7hOK8wJ/F2whr/5i8=
 			</data>
 		</dict>
 		<key>PrivacyInfo.xcprivacy</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+gwjMui50onszIFBb8L8JFfk78u2or8vcj1Vl4dnjd4=
+			17vVnIDW2d8MMExgA2XmLfL5oPvBuv5+ggtHlatzB0M=
 			</data>
 		</dict>
 	</dict>

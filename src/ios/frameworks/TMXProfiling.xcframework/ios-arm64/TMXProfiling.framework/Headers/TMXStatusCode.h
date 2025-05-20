@@ -10,11 +10,7 @@
 #ifndef __TMXSTATUSCODE__
 #define __TMXSTATUSCODE__
 
-#if defined(__has_feature) && __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
 
 /*!
  @typedef TMXStatusCode
@@ -40,6 +36,7 @@
  @constant TMXStatusCodeStrongAuthUnsupported    Local device is missing functionality required to execute Strong Auth request.
  @constant TMXStatusCodeStrongAuthUserNotFound   User context used for Strong Auth not found.
  @constant TMXStatusCodeStrongAuthAlreadyRegistered User context used for Strong Auth is already registered on the device.
+ @constant TMXStatusCodeInsufficientDiskSpace   Indicator of insufficient disk space
  */
 typedef NS_ENUM(NSInteger, TMXStatusCode)
 {
@@ -62,7 +59,8 @@ typedef NS_ENUM(NSInteger, TMXStatusCode)
     TMXStatusCodeStrongAuthCancelled,
     TMXStatusCodeStrongAuthUnsupported,
     TMXStatusCodeStrongAuthUserNotFound,
-    TMXStatusCodeStrongAuthAlreadyRegistered
+    TMXStatusCodeStrongAuthAlreadyRegistered,
+    TMXStatusCodeInsufficientDiskSpace
 };
 
 #endif

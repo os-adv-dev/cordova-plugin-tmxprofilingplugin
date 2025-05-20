@@ -3,13 +3,26 @@
  @header TMXProfilingConnectionsProtocol
 
  @author Samin Pour
- @copyright 2020 ThreatMetrix. All rights reserved.
+ @copyright 2022 ThreatMetrix. All rights reserved.
 
  ThreatMetrix Profiling Connections Protocol for iOS. This protocol should be followed if a customers want to implement customised module for networking.
 */
 
 #ifndef __TMXPROFILINGCONNECTIONSPROTOCOL__
 #define __TMXPROFILINGCONNECTIONSPROTOCOL__
+
+#define TMX_NAME_PASTE2( a, b) a##b
+#define TMX_NAME_PASTE( a, b) TMX_NAME_PASTE2( a, b)
+
+#ifndef TMX_PREFIX_NAME
+#define NO_COMPAT_CLASS_NAME
+#define TMX_PREFIX_NAME
+#endif
+
+#define TMXProfilingConnectionsProtocol   TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfilingConnectionsProtocol)
+#define TMXProfilingConnectionMethod      TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfilingConnectionMethod)
+#define TMXProfilingConnectionMethodPost  TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfilingConnectionMethodPost)
+#define TMXProfilingConnectionMethodGet   TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfilingConnectionMethodGet)
 
 /*!
  * @abstract Enum defining HTTP request method

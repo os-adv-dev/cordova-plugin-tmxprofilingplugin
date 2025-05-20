@@ -9,21 +9,17 @@
 #ifndef _TMXPROFILING_H_
 #define _TMXPROFILING_H_
 
-#if defined(__has_feature) && __has_feature(modules)
-@import Foundation;
-@import CoreLocation;
-#else
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#endif
 
-#import "TMXStatusCode.h"
-#import "TMXProfileHandle.h"
+#import <TMXProfiling/TMXStatusCode.h>
+#import <TMXProfiling/TMXProfileHandle.h>
+#import <TMXProfiling/TMXHybridAppSupport.h>
 
 #ifdef __cplusplus
-#define EXTERN		extern "C" __attribute__((visibility ("default")))
+#define EXTERN        extern "C" __attribute__((visibility ("default")))
 #else
-#define EXTERN	    extern __attribute__((visibility ("default")))
+#define EXTERN        extern __attribute__((visibility ("default")))
 #endif
 
 #define TMX_NAME_PASTE2( a, b) a##b
@@ -35,7 +31,6 @@
 #endif
 
 #define TMXProfiling       TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfiling)
-#define ReactNativeSupport TMX_NAME_PASTE(TMX_PREFIX_NAME, ReactNativeSupport)
 
 /*
  * For this to work, all exported symbols must be included here
@@ -70,6 +65,8 @@
 #define TMXBehavioSecDuration                       TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecDuration)
 #define TMXBehavioSecIncludedViews                  TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecIncludedViews)
 #define TMXBehavioSecMaskedFields                   TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecMaskedFields)
+#define TMXBehavioSecInjectJavascriptCollector      TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecInjectJavascriptCollector)
+#define TMXBehavioSecWebFieldIdentifierAttribute    TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecWebFieldIdentifierAttribute)
 #define TMXProfileStatus                            TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfileStatus)
 
 #endif
@@ -274,6 +271,25 @@ EXTERN NSString *const TMXBehavioSecIncludedViews;
  */
 EXTERN NSString *const TMXBehavioSecMaskedFields;
 
+/*!
+ * @const TMXBehavioSecInjectJavascriptCollector
+ * @abstract BOOL key to configure whether the TMXBehavioSec module should collect WKWebView events.
+ * @discussion When enabled, this key allows the TMXBehavioSec module to swizzle the WKWebView's load method, injecting a JavaScript collector for tracking events within the web view.
+ * Set this to @NO to disable the swizzling and JavaScript injection, preventing the collection of WKWebView events.
+ * @remark Defaults to \@YES (note use of NSNumber to store BOOL).
+ */
+EXTERN NSString *const TMXBehavioSecInjectJavascriptCollector;
+
+/*!
+ * @const TMXBehavioSecWebFieldIdentifierAttribute
+ * @abstract NSString key used to specify which attribute should be treated as the identifier for text fields collected by the TMXBehavioSec module during WKWebView event collection.
+ * @discussion This key determines which attribute (e.g., "id" or "name") will be used to fetch the identifier value of a text field. For example, if the key is set to "id" and a text field has an ID of "password," 
+ * the identifier "password" will be collected. If set to "name," the value of the "name" attribute will be used instead.
+ * @remark This setting is ignored if TMXBehavioSecInjectJavascriptCollector is set to @NO.
+ * Defaults to "id".
+ */
+EXTERN NSString *const TMXBehavioSecWebFieldIdentifierAttribute;
+
 // Profile result options (TMXSessionID is shared)
 
 /*!
@@ -282,33 +298,6 @@ EXTERN NSString *const TMXBehavioSecMaskedFields;
  * @discussion Valid at results time for getting the status of the current profiling request.
  */
 EXTERN NSString *const TMXProfileStatus;
-
-/*!
- * This class should only be used when application is developed using ReactNative framework.
- */
-@interface ReactNativeSupport : NSObject
-
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)allocWithZone:(struct _NSZone * _Nullable)zone NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
-
-/*!
- * @abstract Changes the page (View Controller) name used by TMXBehavioSec module.
- * @discussion Use this method to pass the name of ViewController (component) when
- * application is developed with ReactNative.
- *
- * @param pageName Name of ViewController
- */
-- (void)changePageName:(NSString *)pageName NS_SWIFT_NAME(changePageName(pageName:));
-
-/*!
- * @abstract Clears TMXBehavioSec registration.
- * @discussion Use this method to clear UI registrations when navigating out of a page
- * developed in ReactNative.
- */
-- (void)clearRegistrations NS_SWIFT_NAME(clearRegistrations());
-
-@end
 
 // NOTE: headerdoc2html gets confused if this __attribute__ is after the comment
 __attribute__((visibility("default")))
@@ -322,6 +311,23 @@ __attribute__((visibility("default")))
  * using ReactNative.
  */
 @property(readonly, nonatomic, nonnull) ReactNativeSupport *reactNativeSupport;
+
+/*!
+ * @discussion Use this property to add support for application developed using SwiftUI.
+ */
+@property(readonly, nonatomic, nonnull) SwiftUISupport *swiftUISupport;
+
+/*!
+ * @discussion Use this property to add support for application developed using Flutter
+ */
+@property(readonly, nonatomic, nonnull) FlutterSupport *flutterSupport;
+
+/*!
+ * @discussion Use this property to add support for application developed using Flutter
+ */
+@property(readonly, nonatomic, nonnull) CordovaSupport *cordovaSupport;
+
+
 
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)allocWithZone:(struct _NSZone * _Nullable)zone NS_UNAVAILABLE;
