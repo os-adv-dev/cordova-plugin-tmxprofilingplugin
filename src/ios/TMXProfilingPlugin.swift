@@ -61,13 +61,14 @@ class TMXProfilingPlugin: CDVPlugin {
             sendPluginResult(status: CDVCommandStatus_ERROR, message: "ERROR: Missing input parameters", callbackId: command.callbackId)
         }
 
-        let profilingConnections: TMXProfilingConnections  = TMXProfilingConnections.init()
-        profilingConnections.connectionTimeout = connectionTimeout
-        profilingConnections.connectionRetryCount = retryTimes
-        
+     
         //Get a singleton instance of TMXProfiling
         if let profile = TMXProfiling.sharedInstance() {
             self.profile = profile
+
+            let profilingConnections: TMXProfilingConnections  = TMXProfilingConnections.init()
+            profilingConnections.connectionTimeout = connectionTimeout
+            profilingConnections.connectionRetryCount = retryTimes
             
             profile.configure(configData:[
                                 TMXOrgID              : orgId!,
