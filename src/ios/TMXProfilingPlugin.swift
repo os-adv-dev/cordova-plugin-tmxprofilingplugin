@@ -67,8 +67,8 @@ class TMXProfilingPlugin: CDVPlugin {
             self.profile = profile
 
             let profilingConnections: TMXProfilingConnections  = TMXProfilingConnections.init()
-            profilingConnections.connectionTimeout = connectionTimeout
-            profilingConnections.connectionRetryCount = retryTimes
+            profilingConnections.connectionTimeout = TimeInterval(connectionTimeout)
+            profilingConnections.connectionRetryCount = Int32(retryTimes)
             
             profile.configure(configData:[
                                 TMXOrgID              : orgId!,
