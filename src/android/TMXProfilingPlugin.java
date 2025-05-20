@@ -2,11 +2,10 @@ package com.threatmetrix.cordova.plugin;
 
 import android.util.Log;
 import com.lexisnexisrisk.threatmetrix.TMXConfig;
-import com.lexisnexisrisk.threatmetrix.TMXEndNotifier;
 import com.lexisnexisrisk.threatmetrix.TMXProfiling;
+import com.lexisnexisrisk.threatmetrix.TMXProfilingConnectionsInterface;
 import com.lexisnexisrisk.threatmetrix.TMXProfilingHandle;
 import com.lexisnexisrisk.threatmetrix.TMXProfilingOptions;
-//import com.lexisnexisrisk.threatmetrix.TMXScanEndNotifier;
 import com.lexisnexisrisk.threatmetrix.TMXStatusCode;
 import com.lexisnexisrisk.threatmetrix.tmxprofilingconnections.TMXProfilingConnections;
 import org.apache.cordova.CallbackContext;
@@ -62,6 +61,8 @@ public class TMXProfilingPlugin extends CordovaPlugin {
         boolean disableLocSerOnBatteryLow = args.optBoolean(4, false); // Default to false if not provided
         int profileTimeout = args.optInt(5, 30); // Default to 30 if not provided
         boolean disableNonfatalLogs = args.optBoolean(6, false); // Default to false if not provided
+        int connectionTimeout = args.optInt(7, 20); // Default to 20 if not provided
+        int retryTimes = args.optInt(8, 3); // Default to 3 if not provided
 
         // Validate the parsed arguments to ensure they are not empty
         if (orgId.isEmpty()) {
@@ -73,8 +74,11 @@ public class TMXProfilingPlugin extends CordovaPlugin {
             return false;
         }
 
+        TMXProfilingConnectionsInterface profilingConnections = new TMXProfilingConnections()
+                .setConnectionTimeout(connectionTimeout, TimeUnit.SECONDS)
+                .setRetryTimes(retryTimes);
+
         // Use the parsed arguments to configure TMXProfiling
-        TMXProfilingConnections tmxConn = new TMXProfilingConnections();
         TMXConfig config = new TMXConfig()
                 .setOrgId(orgId)
                 .setFPServer(fpServer)
@@ -85,7 +89,7 @@ public class TMXProfilingPlugin extends CordovaPlugin {
                 .setScreenOffTimeout(screenOffTimeout, TimeUnit.SECONDS)
                 .setDisableLocSerOnBatteryLow(disableLocSerOnBatteryLow)
                 .setProfileTimeout(profileTimeout,TimeUnit.SECONDS)
-                .setProfilingConnections(tmxConn);
+                .setProfilingConnections(profilingConnections);
 
         if (disableNonfatalLogs) {
             config.disableNonfatalLogs();
@@ -110,25 +114,17 @@ public class TMXProfilingPlugin extends CordovaPlugin {
             }
 
             // Start profiling with the configured options
-            TMXProfiling.getInstance().profile(options, new TMXEndNotifier() {
-                @Override
-                public void complete(final TMXProfilingHandle.Result result) {
-                    cordova.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            TMXStatusCode statusCode = result.getStatus();
-                            if (statusCode == TMXStatusCode.TMX_OK) {
-                                Log.i("Plugin", "⭐️ Profiling completed successfully. Session ID: " + result.getSessionID());
-                                callbackContext.success(result.getSessionID());
+            TMXProfiling.getInstance().profile(options, result -> cordova.getActivity().runOnUiThread(() -> {
+                TMXStatusCode statusCode = result.getStatus();
+                if (statusCode == TMXStatusCode.TMX_OK) {
+                    Log.i("Plugin", "⭐️ Profiling completed successfully. Session ID: " + result.getSessionID());
+                    callbackContext.success(result.getSessionID());
 
-                            } else {
-                                Log.e("Plugin", "Error: Profiling failed with status " + statusCode.getDesc());
-                                callbackContext.error("Error: Profiling failed with status " + statusCode.getDesc());
-                            }
-                        }
-                    });
+                } else {
+                    Log.e("Plugin", "Error: Profiling failed with status " + statusCode.getDesc());
+                    callbackContext.error("Error: Profiling failed with status " + statusCode.getDesc());
                 }
-            });
+            }));
 
         } catch (JSONException e) {
             // Handle JSON parsing errors
@@ -138,45 +134,13 @@ public class TMXProfilingPlugin extends CordovaPlugin {
         return true;
     }
 
-    /*
-    private boolean scanPackages(final JSONArray args, final CallbackContext callbackContext) {
-        // Default timeout value if not provided or invalid
-        int defaultTimeout = 30;
-
-        // Attempt to get the timeout value from args, if it's not an integer or is not present, use defaultTimeout
-        int timeout = args.optInt(0, defaultTimeout);
-
-        // Start the package scan with the timeout value
-        boolean scanStarted = TMXProfiling.getInstance().scanPackages(timeout, TimeUnit.SECONDS, new TMXScanEndNotifier() {
-            @Override
-            public void complete() {
-                Log.i("Plugin", "⭐️ Package scan completed successfully.");
-                callbackContext.success("Package scan completed successfully.");
-            }
-        });
-        if (scanStarted) {
-            Log.i("Plugin", "⭐️ Scan started!");
-        } else {
-            Log.i("Plugin", "🚨 Scan NOT started!");
-            callbackContext.error("Error: Scan NOT started");
-        }
-
-        return true;
-    }
-    */
-
     private boolean cancelProfile(final CallbackContext callbackContext) {
-        TMXProfilingHandle profilingHandle = TMXProfiling.getInstance().profile(new TMXEndNotifier(){
-            @Override
-            public void complete(TMXProfilingHandle.Result result)
-            {
-                TMXStatusCode statusCode = result.getStatus();
-                if (statusCode == TMXStatusCode.TMX_OK) {
-                    callbackContext.success();
-                } else {
-                    // Cancel Profiling failed, return the error description
-                    callbackContext.error("Error: " + statusCode.getDesc());
-                }
+        TMXProfilingHandle profilingHandle = TMXProfiling.getInstance().profile(result -> {
+            TMXStatusCode statusCode = result.getStatus();
+            if (statusCode == TMXStatusCode.TMX_OK) {
+                callbackContext.success();
+            } else {
+                callbackContext.error("Error: " + statusCode.getDesc());
             }
         });
         profilingHandle.cancel();
