@@ -76,7 +76,8 @@ public class TMXProfilingPlugin extends CordovaPlugin {
 
         TMXProfilingConnectionsInterface profilingConnections = new TMXProfilingConnections()
                 .setConnectionTimeout(connectionTimeout, TimeUnit.SECONDS)
-                .setRetryTimes(retryTimes);
+                .setRetryTimes(retryTimes)
+                .disableNonfatalLogs();
 
         // Use the parsed arguments to configure TMXProfiling
         TMXConfig config = new TMXConfig()
