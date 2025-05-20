@@ -24,6 +24,9 @@ class TMXProfilingPlugin: CDVPlugin {
         //var disableLocSerOnBatteryLow = false
         var profileTimeout = 30
         var disableNonfatalLogs = false
+        var connectionTimeout = 20
+        var retryTimes = 3
+    
         
         if let orgIdValue = command.arguments[0] as? String, let fpServerValue = command.arguments[1] as? String {
             orgId = orgIdValue
@@ -45,12 +48,22 @@ class TMXProfilingPlugin: CDVPlugin {
             if command.arguments.count > 6, let value = command.arguments[6] as? Bool {
                 disableNonfatalLogs = value
             }
+            if command.arguments.count > 7, let value = command.arguments[7] as? Int {
+                connectionTimeout = value
+            }
+            if command.arguments.count > 8, let value = command.arguments[8] as? Int {
+                retryTimes = value
+            }
             
         } else {
             //ERROR: Missing input parameters
             print("🚨 ERROR: Missing input parameters")
             sendPluginResult(status: CDVCommandStatus_ERROR, message: "ERROR: Missing input parameters", callbackId: command.callbackId)
         }
+
+        let profilingConnections: TMXProfilingConnections  = TMXProfilingConnections.init()
+        profilingConnections.connectionTimeout = connectionTimeout
+        profilingConnections.connectionRetryCount = retryTimes
         
         //Get a singleton instance of TMXProfiling
         if let profile = TMXProfiling.sharedInstance() {
@@ -61,7 +74,8 @@ class TMXProfilingPlugin: CDVPlugin {
                                 TMXFingerprintServer  : fpServer!,
                                 TMXProfileTimeout     : profileTimeout,
                                 TMXDisableNonFatalLog : disableNonfatalLogs,
-                                TMXLocationServices   : registerForLocationServices
+                                TMXLocationServices   : registerForLocationServices,
+                                TMXProfilingConnectionsInstance : profilingConnections
                                 ])
             sendPluginResult(status: CDVCommandStatus_OK, callbackId: command.callbackId)
         } else {
