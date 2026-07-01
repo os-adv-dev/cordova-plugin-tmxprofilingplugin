@@ -1,18 +1,13 @@
 /*!
   @header TMXProfileHandle.h
 
-  @author by Samin Pour
-  @copyright 2022 ThreatMetrix. All rights reserved.
+  @copyright ThreatMetrix. All rights reserved.
 */
 
 #ifndef __TMXPROFILEHANDLE__
 #define __TMXPROFILEHANDLE__
 
-#if defined(__has_feature) && __has_feature(modules)
-@import Foundation;
-#else
 #import <Foundation/Foundation.h>
-#endif
 
 #define TMX_NAME_PASTE2( a, b) a##b
 #define TMX_NAME_PASTE( a, b) TMX_NAME_PASTE2( a, b)
@@ -25,6 +20,10 @@
 #define TMXProfileHandle TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfileHandle)
 
 
+__attribute__((visibility("default")))
+/*!
+ * @interface TMXProfileHandle
+ */
 @interface TMXProfileHandle : NSObject
 
 /*! @abstract Session ID used for profiling. */
@@ -46,6 +45,12 @@
  * @Note calling this method does not stop collection of biometrics information.
  */
 -(void) sendBehavioSecData;
+
+/*!
+* @abstract Stops biometric data collection.
+* @discussion This method disables the biometric module to ensure no further data collection occurs in the background. Useful when biometric data collection is only needed for specific screens like login and to avoid unintended data collection.
+*/
+-(void)stopBehavioSecDataCollection;
 
 @end
 

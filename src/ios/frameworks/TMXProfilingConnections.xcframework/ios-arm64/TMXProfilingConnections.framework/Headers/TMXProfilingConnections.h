@@ -1,23 +1,18 @@
 /*!
   @header TMXProfilingConnections.h
 
-  @author Samin Pour
-  @copyright 2022 ThreatMetrix. All rights reserved.
+  @copyright ThreatMetrix. All rights reserved.
 
- ThreatMetrix Profiling Connections module for iOS. This header is the main framework header, and is required to make use of the TMXProfilingConnections with iOS SDK.
+  ThreatMetrix Profiling Connections module for iOS.
+  This header is the main framework header, and is required to make use of the TMXProfilingConnections with iOS SDK.
  */
 #ifndef __TMXPROFILINGCONNECTIONS__
 #define __TMXPROFILINGCONNECTIONS__
 
-#if defined(__has_feature) && __has_feature(modules)
-@import Foundation;
-@import CoreData;
-#else
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#endif
 
-#import "TMXProfilingConnectionsProtocol.h"
+#import <TMXProfilingConnections/TMXProfilingConnectionsProtocol.h>
 
 #ifdef __cplusplus
 #define EXTERN        extern "C" __attribute__((visibility ("default")))
