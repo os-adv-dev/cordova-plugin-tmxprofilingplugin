@@ -1,8 +1,7 @@
 /*!
  @header TMXStatusCode.h
 
- @author Nick Blievers
- @copyright 2022 ThreatMetrix. All rights reserved.
+ @copyright ThreatMetrix. All rights reserved.
 
  The statuses that are used as indicators of profiling state.
  */

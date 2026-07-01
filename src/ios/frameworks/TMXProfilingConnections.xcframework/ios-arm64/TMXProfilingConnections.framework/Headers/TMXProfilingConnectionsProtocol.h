@@ -2,10 +2,10 @@
 
  @header TMXProfilingConnectionsProtocol
 
- @author Samin Pour
- @copyright 2022 ThreatMetrix. All rights reserved.
+ @copyright ThreatMetrix. All rights reserved.
 
- ThreatMetrix Profiling Connections Protocol for iOS. This protocol should be followed if a customers want to implement customised module for networking.
+ ThreatMetrix Profiling Connections Protocol for iOS.
+ This protocol should be followed if a customers want to implement customised module for networking.
 */
 
 #ifndef __TMXPROFILINGCONNECTIONSPROTOCOL__
@@ -71,19 +71,7 @@ typedef NS_ENUM(NSInteger, TMXProfilingConnectionMethod)
  * 1. result - Raw HTTP response
  * 2. error - An instance of NSError to indicate any connection errors. TMXProfiling uses error.code to map connection errors to TMXStatusCode in profiling.
  */
-- (void)httpProfilingRequestWithUrl:(NSURL * _Nonnull)url method:(TMXProfilingConnectionMethod)method headers:(NSDictionary * _Nullable)headers postBody:(NSData * _Nullable)postData completionHandler:(void (^_Nullable)(NSData * _Nullable result, NSError * _Nullable error))completionHandler NS_SWIFT_NAME(httpProfilingRequest(url:method:headers:postData:completionHandler:));
-
-@required
-/*!
- * @abstract This method uses a simple TCP request to detect a proxy server is being used
- * @discussion ThreatMetrix SDK calls this method during profiling, however profiling won't fail if this method has an empty body.
- * @param host Fingerprint server used for proxy ip detection.
- * @param port TCP port
- * @param data request body
- * @deprecated This method is deprecated and will be removed in future releases
- * @remark Result of proxy ip detection will be undefined if any of parameters are changed.
- */
-- (void)socketProfilingRequestWithHost:(NSString * _Nonnull)host port:(int)port data:(NSData * _Nonnull)data NS_SWIFT_NAME(socketProfilingRequest(host:port:data:)) __attribute__((deprecated));
+- (void)httpProfilingRequestWithUrl:(NSURL * _Nonnull)url method:(TMXProfilingConnectionMethod)method headers:(NSDictionary * _Nullable)headers postBody:(NSData * _Nullable)postData completionHandler:(void (^ NS_SWIFT_SENDABLE _Nullable)(NSData * _Nullable result, NSError * _Nullable error))completionHandler NS_SWIFT_NAME(httpProfilingRequest(url:method:headers:postData:completionHandler:));
 
 @required
 /*!
