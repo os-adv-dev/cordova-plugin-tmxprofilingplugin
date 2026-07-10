@@ -1,10 +1,8 @@
-//
-//  HybridAppSupport.h
-//  TMXProfiling
-//
-//  Created by Samin Pour on 30/1/2024.
-//  Copyright © 2024 ThreatMetrix. All rights reserved.
-//
+/*!
+ @header HybridAppSupport.h
+
+ @copyright ThreatMetrix. All rights reserved.
+ */
 
 #ifndef _TMXHYBRIDAPPSUPPORT_H
 #define _TMXHYBRIDAPPSUPPORT_H
@@ -61,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  * This class should only be used when application is developed using
- * hybrid applications like Flutter. It adds additional Ntf (Non Text Field) support
+ * hybrid applications like Flutter. It adds additional Ntf (Non-Text Field) support
  */
 @interface TMXHybridAppWithNTFSupport : TMXHybridAppSupport
 

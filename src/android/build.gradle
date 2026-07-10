@@ -1,5 +1,5 @@
 dependencies {
     implementation fileTree(include: ['*.aar'], dir: 'libs')
-    implementation files("src/main/libs/TMXProfiling-7.6-46.aar")
-    implementation files("src/main/libs/TMXProfilingConnections-7.6-46.aar")
+    implementation files("src/main/libs/TMXProfiling-8.2-129.aar")
+    implementation files("src/main/libs/TMXProfilingConnections-8.2-129.aar")
 } 

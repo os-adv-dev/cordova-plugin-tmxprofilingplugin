@@ -1,8 +1,7 @@
 /*!
  @header TMXProfiling.h
 
- @author Nick Blievers
- @copyright 2022 ThreatMetrix. All rights reserved.
+ @copyright ThreatMetrix. All rights reserved.
 
  ThreatMetrix SDK for iOS. This header is the main framework header, and is required to make use of the mobile SDK.
  */
@@ -51,10 +50,17 @@
 #endif
 #define TMXProfileTimeout                           TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfileTimeout)
 #define TMXProfilingConnectionsInstance             TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfilingConnectionsInstance)
+#define TMXBehavioSecIncludedViews                  TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecIncludedViews)
+#define TMXBehavioSecExcludedViews                  TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecExcludedViews)
+#define TMXBehavioSecMaskedFields                   TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecMaskedFields)
+#define TMXBehavioSecInjectJavascriptCollector      TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecInjectJavascriptCollector)
+#define TMXBehavioSecWebFieldIdentifierAttribute    TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecWebFieldIdentifierAttribute)
 
 #if (TARGET_OS_IPHONE || TARGET_OS_SIMULATOR) //iOS only
 #define TMXDisableAuthenticationModule              TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXDisableAuthenticationModule)
 #define TMXPushTokenSwizzling                       TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXPushTokenSwizzling)
+#define TMXEnableSensorsModule                      TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXEnableSensorsModule)
+
 #endif
 
 //Profiling attributes
@@ -63,10 +69,6 @@
 #define TMXLocation                                 TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXLocation)
 #define TMXDisableBehavioSec                        TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXDisableBehavioSec)
 #define TMXBehavioSecDuration                       TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecDuration)
-#define TMXBehavioSecIncludedViews                  TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecIncludedViews)
-#define TMXBehavioSecMaskedFields                   TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecMaskedFields)
-#define TMXBehavioSecInjectJavascriptCollector      TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecInjectJavascriptCollector)
-#define TMXBehavioSecWebFieldIdentifierAttribute    TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXBehavioSecWebFieldIdentifierAttribute)
 #define TMXProfileStatus                            TMX_NAME_PASTE(TMX_PREFIX_NAME, TMXProfileStatus)
 
 #endif
@@ -183,6 +185,58 @@ EXTERN NSString *const TMXDisableAuthenticationModule;
  */
 EXTERN NSString *const TMXPushTokenSwizzling;
 
+/*!
+* @const TMXEnableSensorsModule
+* @abstract NSDictionary key to enable the sensors module to collect altimeter data.
+* @discussion Valid at [configure:] time for enabling the sensors module to collect altimeter data.
+* If permission has not already been granted, the SDK will request the necessary permissions.
+ * Default value is \@NO (note use of NSNumber to store BOOL)
+*/
+EXTERN NSString *const TMXEnableSensorsModule;
+
+/*!
+ * @const TMXBehavioSecIncludedViews
+ * @abstract NSDictionary key for passing a set of ViewController names to TMXBehavioSec module.
+ * @discussion Valid at [configure:] time for passing a set (NSSet) of View Controller names to be monitored by TMXBehavioSec.
+ * By default all ViewControllers are monitored.
+ */
+EXTERN NSString *const TMXBehavioSecIncludedViews;
+
+/*!
+ * @const TMXBehavioSecExcludedViews
+ * @abstract NSDictionary key for passing a set of ViewController names to TMXBehavioSec module.
+ * @discussion Valid at [configure:] time for passing a set (NSSet) of View Controller names to be excluded by TMXBehavioSec.
+ * By default all ViewControllers are monitored.
+ */
+EXTERN NSString *const TMXBehavioSecExcludedViews;
+
+/*!
+ * @const TMXBehavioSecMaskedFields
+ * @abstract NSDictionary key for setting a set of the UITextField tracking ids from which TMXBehavioSec should collect data
+ * in masked mode. By default all information typed in non-secure fields in are processed as normal.
+ * If you want to collect this data in Masked (anonymous) mode, add its identifier using this method.
+ * @discussion Valid at [configure:] time for passing a set (NSSet) of tracking ids to be treated as masked.
+ */
+EXTERN NSString *const TMXBehavioSecMaskedFields;
+
+/*!
+ * @const TMXBehavioSecInjectJavascriptCollector
+ * @abstract BOOL key to configure whether the TMXBehavioSec module should collect WKWebView events.
+ * @discussion Valid at [configure:] time for passing a Boolean, which, when enabled, permits the TMXBehavioSec module to alter the WKWebView's load method. This alteration involves incorporating a JavaScript collector to track events within the web view.
+ * Set this to @NO to disable the swizzling and JavaScript injection, preventing the collection of WKWebView events.
+ * @remark Defaults to \@NO (note use of NSNumber to store BOOL).
+ */
+EXTERN NSString *const TMXBehavioSecInjectJavascriptCollector;
+
+/*!
+ * @const TMXBehavioSecWebFieldIdentifierAttribute
+ * @abstract NSString key used to specify which attribute should be treated as the identifier for text fields collected by the TMXBehavioSec module during WKWebView event collection.
+ * @discussion Valid at [configure:] time for passing a string (NSString) which determines which attribute (e.g., "id" or "name") will be used to fetch the identifier value of a text field. For example, if the key is set to "id" and a text field has an ID of "password," the identifier "password" will be collected. If set to "name," the value of the "name" attribute will be used instead.
+ * @remark This setting is ignored if TMXBehavioSecInjectJavascriptCollector is set to @NO.
+ * Defaults to "id".
+ */
+EXTERN NSString *const TMXBehavioSecWebFieldIdentifierAttribute;
+
 #endif
 
 #if (!TARGET_OS_IPHONE && !TARGET_OS_SIMULATOR)
@@ -254,42 +308,6 @@ EXTERN NSString *const TMXDisableBehavioSec;
  */
 EXTERN NSString *const TMXBehavioSecDuration;
 
-/*!
- * @const TMXBehavioSecIncludedViews
- * @abstract NSDictionary key for passing a set of ViewController names to TMXBehavioSec module.
- * @discussion Valid at [profile:] time for passing a set (NSSet) of View Controller names to be monitored by TMXBehavioSec.
- * By default all ViewControllers are monitored.
- */
-EXTERN NSString *const TMXBehavioSecIncludedViews;
-
-/*!
- * @const TMXBehavioSecMaskedFields
- * @abstract NSDictionary key for setting a set of the UITextField tracking ids from which TMXBehavioSec should collect data
- * in masked mode. By default all information typed in non-secure fields in are processed as normal.
- * If you want to collect this data in Masked (anonymous) mode, add its identifier using this method.
- * @discussion Valid at [profile:] time for passing a set (NSSet) of tracking ids to be treated as masked.
- */
-EXTERN NSString *const TMXBehavioSecMaskedFields;
-
-/*!
- * @const TMXBehavioSecInjectJavascriptCollector
- * @abstract BOOL key to configure whether the TMXBehavioSec module should collect WKWebView events.
- * @discussion When enabled, this key allows the TMXBehavioSec module to swizzle the WKWebView's load method, injecting a JavaScript collector for tracking events within the web view.
- * Set this to @NO to disable the swizzling and JavaScript injection, preventing the collection of WKWebView events.
- * @remark Defaults to \@YES (note use of NSNumber to store BOOL).
- */
-EXTERN NSString *const TMXBehavioSecInjectJavascriptCollector;
-
-/*!
- * @const TMXBehavioSecWebFieldIdentifierAttribute
- * @abstract NSString key used to specify which attribute should be treated as the identifier for text fields collected by the TMXBehavioSec module during WKWebView event collection.
- * @discussion This key determines which attribute (e.g., "id" or "name") will be used to fetch the identifier value of a text field. For example, if the key is set to "id" and a text field has an ID of "password," 
- * the identifier "password" will be collected. If set to "name," the value of the "name" attribute will be used instead.
- * @remark This setting is ignored if TMXBehavioSecInjectJavascriptCollector is set to @NO.
- * Defaults to "id".
- */
-EXTERN NSString *const TMXBehavioSecWebFieldIdentifierAttribute;
-
 // Profile result options (TMXSessionID is shared)
 
 /*!
@@ -360,6 +378,34 @@ __attribute__((visibility("default")))
  *
  */
 - (void)configure:(NSDictionary *)config NS_SWIFT_NAME(configure(configData:));
+
+/*!
+ * @abstract Configures the shared instance of TMXProfiling object with the TMXConfiguration.plist
+ * @discussion Only the first call to configure will use configuration details from the .plist file, subsequent calls will be ignored
+ * @code
+ * [TMXProfiling sharedInstance] configure];
+ * @endcode
+ *
+ * @remark This method runs only once, any following calls have no effect.
+ * @throws An exception of type NSInvalidArgumentException if config TMXConfiguration.plist contains invalid keys or malformed values
+ *
+ */
+- (void)configure NS_SWIFT_NAME(configure());
+
+/*!
+ * @abstract Configures the shared instance of TMXProfiling object with the TMXConfiguration.plist
+ * @discussion Only the first call to configure will use configuration details from the .plist file, subsequent calls will be ignored
+ * @code
+ * [TMXProfiling sharedInstance] configure];
+ * @endcode
+ *
+ * @remark This method runs only once, any following calls have no effect.
+ * @param profilingConnections An instance of a TMXProfilingConnectionsProtocol conforming class like TMXProfilingConnections
+ * @throws An exception of type NSInvalidArgumentException if config TMXConfiguration.plist contains invalid or malformed keys
+ * or profilingConnections doesn't conform to TMXProfilingConnectionsProtocol
+ *
+ */
+- (void)configureWith:(id)profilingConnections NS_SWIFT_NAME(configure(profilingConnections:));
 
 /*!
  * @abstract Performs profiling process.
