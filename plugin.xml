@@ -67,6 +67,7 @@
         <source-file src="src/ios/TMXProfilingPlugin.swift" />
         <framework src="src/ios/frameworks/TMXProfiling.xcframework" custom="true" embed="true" />
         <framework src="src/ios/frameworks/TMXProfilingConnections.xcframework" custom="true" embed="true" />
+        <framework src="src/ios/TMXProfiling-companion.framework" custom="true" embed="true" />
         <source-file src="src/ios/frameworks/TMXProfilingConnections.xcframework/ios-arm64/TMXProfilingConnections.framework" framework="true" />
     </platform>
 </plugin>
